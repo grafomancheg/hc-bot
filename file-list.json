@@ -1,24 +1,37 @@
 [
-    {
-        "name": "doc1.pdf",
-        "url": "https://raw.githubusercontent.com/grafomancheg/hc-bot/main/files/doc1.pdf",
-        "size": "2.3 MB",
-        "modified": "22.01.2025",
-        "description": "doc1"
-    },
-    {
-        "name": "doc2.pdf",
-        "url": "https://raw.githubusercontent.com/grafomancheg/hc-bot/main/files/doc2.pdf",
-        "size": "1.1 MB", 
-        "modified": "21.01.2025",
-        "description": "doc2"
-    },
-    {
-        "name": "Дюймовочка.pdf",
-        "url": "https://raw.githubusercontent.com/grafomancheg/hc-bot/main/files/Дюймовочка.pdf",
-        "size": "2.1 MB", 
-        "modified": "29.09.2025",
-        "description": "Дюймовочка"
-    }
-    
+  {
+    "name": "Дюймовочка.pdf",
+    "url": "https://raw.githubusercontent.com/grafomancheg/hc-bot/main/files/Дюймовочка.pdf",
+    "size": "243.6 KB",
+    "modified": "29.09.2025",
+    "description": "Дюймовочка"
+  },
+  {
+    "name": "1.txt",
+    "url": "https://raw.githubusercontent.com/grafomancheg/hc-bot/main/files/1.txt",
+    "size": "1.0 B",
+    "modified": "29.09.2025",
+    "description": "1"
+  },
+  {
+    "name": "Ганс Христиан Андерсен.pdf",
+    "url": "https://raw.githubusercontent.com/grafomancheg/hc-bot/main/files/Ганс Христиан Андерсен.pdf",
+    "size": "302.1 KB",
+    "modified": "29.09.2025",
+    "description": "Ганс Христиан Андерсен"
+  },
+  {
+    "name": "doc1.pdf",
+    "url": "https://raw.githubusercontent.com/grafomancheg/hc-bot/main/files/doc1.pdf",
+    "size": "474.9 KB",
+    "modified": "29.09.2025",
+    "description": "doc1"
+  },
+  {
+    "name": "doc2.pdf",
+    "url": "https://raw.githubusercontent.com/grafomancheg/hc-bot/main/files/doc2.pdf",
+    "size": "207.4 KB",
+    "modified": "29.09.2025",
+    "description": "doc2"
+  }
 ]
