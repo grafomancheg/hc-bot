@@ -1,31 +1,67 @@
 name: Update File List
+
 on:
   push:
     paths:
       - 'files/**'
-  workflow_dispatch:
+    branches: [ main ]
+  workflow_dispatch: # Позволяет запускать вручную
 
 jobs:
-  update:
+  update-file-list:
     runs-on: ubuntu-latest
+    
     steps:
-      - uses: actions/checkout@v3
-      - name: Update file list
-        run: |
-          echo '[' > file-list.json
-          for file in files/*.pdf; do
-            if [ -f "$file" ]; then
-              size=$(stat -f%z "$file")
-              modified=$(date -r "$file" +%d.%m.%Y)
-              name=$(basename "$file")
-              echo "  {\"name\": \"$name\", \"url\": \"files/$name\", \"size\": \"$(echo "scale=1; $size/1024/1024" | bc) MB\", \"modified\": \"$modified\"}," >> file-list.json
-            fi
-          done
-          echo ']' >> file-list.json
-      - name: Commit changes
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add file-list.json
-          git commit -m "Update file list" || exit 0
-          git push
+    - uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Update file list
+      run: |
+        # Создаем простой скрипт для обновления file-list.json
+        node -e "
+        const fs = require('fs');
+        const path = require('path');
+        const filesDir = './files';
+        
+        const files = fs.readdirSync(filesDir).filter(f => f !== '.gitkeep');
+        const fileList = files.map(filename => {
+          const filePath = path.join(filesDir, filename);
+          const stats = fs.statSync(filePath);
+          
+          const formatSize = (bytes) => {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+          };
+          
+          const formatDate = (date) => {
+            return date.toLocaleDateString('ru-RU', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric'
+            });
+          };
+          
+          return {
+            name: filename,
+            url: 'https://raw.githubusercontent.com/${{ github.repository }}/main/files/' + encodeURIComponent(filename),
+            size: formatSize(stats.size),
+            modified: formatDate(stats.mtime),
+            description: filename.replace(/\\.[^/.]+$/, '')
+          };
+        });
+        
+        fs.writeFileSync('./file-list.json', JSON.stringify(fileList, null, 2));
+        console.log('Updated file-list.json with ' + fileList.length + ' files');
+        "
+    
+    - name: Commit and push if changed
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add file-list.json
+        git diff --staged --quiet || git commit -m "🤖 Auto-update file list"
+        git push
