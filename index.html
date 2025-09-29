@@ -123,6 +123,22 @@
             font-size: 14px;
             margin: 5px 0;
         }
+        .download-count {
+            color: #e74c3c;
+            font-weight: 600;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        .total-downloads {
+            background: #e74c3c;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
         .loading {
             text-align: center;
             padding: 40px;
@@ -199,6 +215,9 @@
         <div class="header">
             <h1>📁 Файловый каталог</h1>
             <p>Все документы в одном месте</p>
+            <div id="total-downloads" class="total-downloads">
+                Всего скачиваний: 0
+            </div>
             <div class="warning">
                 <strong>💡 Как отправить файл в чат:</strong><br>
                 1. Нажмите "Поделиться файлом"<br>
@@ -234,6 +253,39 @@
 
     <script>
         let allFiles = []; // Глобальная переменная для хранения всех файлов
+        let downloadStats = {}; // Статистика скачиваний
+        
+        // Загрузка статистики из localStorage
+        function loadDownloadStats() {
+            const savedStats = localStorage.getItem('fileDownloadStats');
+            if (savedStats) {
+                downloadStats = JSON.parse(savedStats);
+            }
+            updateTotalDownloads();
+        }
+        
+        // Сохранение статистики в localStorage
+        function saveDownloadStats() {
+            localStorage.setItem('fileDownloadStats', JSON.stringify(downloadStats));
+            updateTotalDownloads();
+        }
+        
+        // Обновление общего счетчика скачиваний
+        function updateTotalDownloads() {
+            const total = Object.values(downloadStats).reduce((sum, count) => sum + count, 0);
+            document.getElementById('total-downloads').textContent = `Всего скачиваний: ${total}`;
+        }
+        
+        // Получение счетчика для конкретного файла
+        function getDownloadCount(fileUrl) {
+            return downloadStats[fileUrl] || 0;
+        }
+        
+        // Увеличение счетчика скачиваний
+        function incrementDownloadCount(fileUrl) {
+            downloadStats[fileUrl] = (downloadStats[fileUrl] || 0) + 1;
+            saveDownloadStats();
+        }
         
         // Функция показа попапа
         function showPopup(title, message) {
@@ -348,6 +400,12 @@
                 modified.className = 'file-info';
                 modified.textContent = `📅 Изменен: ${file.modified}`;
                 
+                // Счетчик скачиваний для файла
+                const downloadCount = document.createElement('div');
+                downloadCount.className = 'download-count';
+                downloadCount.id = `download-count-${btoa(file.url)}`;
+                downloadCount.textContent = `📊 Скачан: ${getDownloadCount(file.url)} раз`;
+                
                 const buttonGroup = document.createElement('div');
                 buttonGroup.className = 'button-group';
                 
@@ -367,6 +425,7 @@
                 fileElement.appendChild(name);
                 fileElement.appendChild(size);
                 fileElement.appendChild(modified);
+                fileElement.appendChild(downloadCount);
                 
                 if (file.description) {
                     const desc = document.createElement('p');
@@ -385,6 +444,15 @@
         function downloadFile(url, fileName) {
             // Для GitHub Pages используем относительные пути
             const fullUrl = url.startsWith('http') ? url : window.location.origin + '/' + url;
+            
+            // Увеличиваем счетчик скачиваний
+            incrementDownloadCount(url);
+            
+            // Обновляем отображение счетчика для этого файла
+            const countElement = document.getElementById(`download-count-${btoa(url)}`);
+            if (countElement) {
+                countElement.textContent = `📊 Скачан: ${getDownloadCount(url)} раз`;
+            }
             
             // Открываем файл в новой вкладке для скачивания
             window.open(fullUrl, '_blank');
@@ -461,6 +529,10 @@
         
         // Автоматическая загрузка файлов при открытии страницы
         document.addEventListener('DOMContentLoaded', function() {
+            // Загружаем статистику скачиваний
+            loadDownloadStats();
+            
+            // Загружаем файлы
             loadFiles();
             
             // Добавляем обработчик для поля поиска
