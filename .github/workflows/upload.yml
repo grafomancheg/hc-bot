@@ -1,0 +1,31 @@
+name: Update File List
+on:
+  push:
+    paths:
+      - 'files/**'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Update file list
+        run: |
+          echo '[' > file-list.json
+          for file in files/*.pdf; do
+            if [ -f "$file" ]; then
+              size=$(stat -f%z "$file")
+              modified=$(date -r "$file" +%d.%m.%Y)
+              name=$(basename "$file")
+              echo "  {\"name\": \"$name\", \"url\": \"files/$name\", \"size\": \"$(echo "scale=1; $size/1024/1024" | bc) MB\", \"modified\": \"$modified\"}," >> file-list.json
+            fi
+          done
+          echo ']' >> file-list.json
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add file-list.json
+          git commit -m "Update file list" || exit 0
+          git push
