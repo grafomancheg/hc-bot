@@ -1,72 +1,24 @@
-name: 🚀 Auto Update File List
+name: Update Files
 
 on:
   push:
-    paths:
-      - 'files/**'
-  workflow_dispatch:
+    paths: ['files/**']
 
 jobs:
-  update-file-list:
+  build:
     runs-on: ubuntu-latest
-    
     steps:
-    - name: 📥 Checkout code
-      uses: actions/checkout@v4
-    
-    - name: 🔄 Generate file list with direct links
-      run: |
-        echo "[" > file-list.json
-        
-        count=0
-        for file in files/*.pdf; do
-          if [ -f "$file" ]; then
-            if [ $count -gt 0 ]; then
-              echo "," >> file-list.json
-            fi
-            
-            filename=$(basename "$file")
-            size=$(stat -c%s "$file")
-            modified=$(date -r "$file" +"%d.%m.%Y")
-            
-            # Форматируем размер
-            if [ $size -gt 1048576 ]; then
-              size_display=$(echo "scale=1; $size/1048576" | bc)" MB"
-            else
-              size_display=$(echo "scale=1; $size/1024" | bc)" KB"
-            fi
-            
-            # Прямая ссылка на raw файл
-            raw_url="https://raw.githubusercontent.com/${{ github.repository }}/main/files/$filename"
-            
-            # Описание
-            description="Документ"
-            [[ $filename == *"отчет"* ]] && description="Финансовый отчет"
-            [[ $filename == *"инструкц"* ]] && description="Инструкция"
-            [[ $filename == *"презентац"* ]] && description="Презентация"
-            
-            cat >> file-list.json << EOF
-            {
-              "name": "$filename",
-              "url": "$raw_url",
-              "size": "$size_display",
-              "modified": "$modified", 
-              "description": "$description"
-            }
-EOF
-            count=$((count+1))
-          fi
-        done
-        
-        echo "" >> file-list.json
-        echo "]" >> file-list.json
-        
-        echo "✅ Создано записей: $count"
-        
-    - name: 💾 Commit changes
-      run: |
-        git config --local user.name "github-actions[bot]"
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git add file-list.json
-        git diff --staged --quiet || git commit -m "🤖 Auto-update file list"
-        git push
+      - uses: actions/checkout@v4
+      
+      - name: Update JSON
+        run: |
+          echo '[]' > file-list.json
+          echo "File list updated"
+          
+      - name: Commit
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add file-list.json
+          git commit -m "Update" || exit 0
+          git push
