@@ -403,7 +403,6 @@
                 // Счетчик скачиваний для файла
                 const downloadCount = document.createElement('div');
                 downloadCount.className = 'download-count';
-                downloadCount.id = `download-count-${btoa(file.url)}`;
                 downloadCount.textContent = `📊 Скачан: ${getDownloadCount(file.url)} раз`;
                 
                 const buttonGroup = document.createElement('div');
@@ -440,7 +439,7 @@
             });
         }
         
-        // Функция скачивания на устройство (ваша рабочая версия)
+        // Функция скачивания на устройство
         function downloadFile(url, fileName) {
             // Для GitHub Pages используем относительные пути
             const fullUrl = url.startsWith('http') ? url : window.location.origin + '/' + url;
@@ -448,11 +447,8 @@
             // Увеличиваем счетчик скачиваний
             incrementDownloadCount(url);
             
-            // Обновляем отображение счетчика для этого файла
-            const countElement = document.getElementById(`download-count-${btoa(url)}`);
-            if (countElement) {
-                countElement.textContent = `📊 Скачан: ${getDownloadCount(url)} раз`;
-            }
+            // Перезагружаем файлы для обновления счетчиков
+            filterFiles();
             
             // Открываем файл в новой вкладке для скачивания
             window.open(fullUrl, '_blank');
