@@ -21,13 +21,6 @@
     "description": "БЛАНК ПАО_Свед. о застрахованном лице с 31.05.2022"
   },
   {
-    "name": "1.txt",
-    "url": "https://raw.githubusercontent.com/grafomancheg/hc-bot/main/files/1.txt",
-    "size": "1.0 B",
-    "modified": "29.09.2025",
-    "description": "1"
-  },
-  {
     "name": "№11626(счет.акт).pdf",
     "url": "https://raw.githubusercontent.com/grafomancheg/hc-bot/main/files/№11626(счет.акт).pdf",
     "size": "498.9 KB",
