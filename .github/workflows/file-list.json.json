@@ -1,0 +1,23 @@
+[
+    {
+        "name": "Финансовый отчет 2024.pdf",
+        "url": "files/financial-report-2024.pdf",
+        "size": "2.3 MB",
+        "modified": "22.01.2024",
+        "description": "Полный финансовый анализ за 2024 год"
+    },
+    {
+        "name": "Инструкция пользователя.pdf",
+        "url": "files/user-manual.pdf",
+        "size": "1.1 MB", 
+        "modified": "21.01.2024",
+        "description": "Руководство по использованию системы"
+    },
+    {
+        "name": "Презентация проекта.pdf",
+        "url": "files/project-presentation.pdf",
+        "size": "3.7 MB",
+        "modified": "20.01.2024",
+        "description": "Ключевые слайды и метрики проекта"
+    }
+]
