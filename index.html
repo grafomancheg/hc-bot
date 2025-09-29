@@ -3,36 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📁 Файлы для обучения</title>
+    <title>📁 Файловый каталог</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             padding: 20px;
-            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             margin: 0;
-            color: white;
         }
         .container {
             max-width: 800px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
+            background: white;
             border-radius: 20px;
-            padding: 25px;
+            padding: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            color: #2c3e50;
         }
         .header {
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
         .file-item {
             background: #f8f9fa;
-            margin: 15px 0;
-            padding: 20px;
+            margin: 20px 0;
+            padding: 25px;
             border-radius: 15px;
-            border-left: 5px solid #27ae60;
+            border-left: 5px solid #28a745;
             transition: transform 0.2s;
         }
         .file-item:hover {
@@ -40,56 +38,48 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         .download-btn {
-            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            background: linear-gradient(45deg, #28a745, #20c997);
             color: white;
             border: none;
-            padding: 10px 18px;
+            padding: 12px 25px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 600;
-            margin-right: 8px;
-            margin-top: 10px;
+            margin-top: 15px;
+            margin-right: 10px;
             transition: all 0.3s;
-            flex: 1;
-            min-width: 140px;
         }
         .download-btn:hover {
-            transform: scale(1.03);
-            box-shadow: 0 3px 10px rgba(39, 174, 96, 0.4);
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
         }
         .share-btn {
-            background: linear-gradient(45deg, #3498db, #2980b9);
+            background: linear-gradient(45deg, #007bff, #0056b3);
             color: white;
             border: none;
-            padding: 10px 18px;
+            padding: 12px 25px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 600;
-            margin-top: 10px;
+            margin-top: 15px;
             transition: all 0.3s;
-            flex: 1;
-            min-width: 140px;
         }
         .share-btn:hover {
-            transform: scale(1.03);
-            box-shadow: 0 3px 10px rgba(52, 152, 219, 0.4);
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
         }
         .refresh-btn {
-            background: linear-gradient(45deg, #3498db, #2980b9);
+            background: linear-gradient(45deg, #007bff, #0056b3);
             color: white;
             border: none;
             padding: 12px 20px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 16px;
             margin-bottom: 20px;
             width: 100%;
-            transition: all 0.3s;
-        }
-        .refresh-btn:hover {
-            transform: scale(1.02);
         }
         .search-container {
             margin-bottom: 20px;
@@ -97,17 +87,17 @@
         }
         .search-input {
             width: 100%;
-            padding: 12px 20px;
+            padding: 15px 20px;
             border: 2px solid #e9ecef;
             border-radius: 10px;
-            font-size: 14px;
+            font-size: 16px;
             transition: all 0.3s;
             box-sizing: border-box;
         }
         .search-input:focus {
             outline: none;
-            border-color: #27ae60;
-            box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
         }
         .search-icon {
             position: absolute;
@@ -125,59 +115,58 @@
             border: none;
             color: #6c757d;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 18px;
             display: none;
         }
         .file-info {
             color: #6c757d;
-            font-size: 13px;
-            margin: 4px 0;
+            font-size: 14px;
+            margin: 5px 0;
         }
         .download-count {
             color: #e74c3c;
             font-weight: 600;
-            font-size: 13px;
-            margin: 4px 0;
+            font-size: 14px;
+            margin: 5px 0;
         }
         .loading {
             text-align: center;
-            padding: 30px;
+            padding: 40px;
             color: #6c757d;
-            font-size: 16px;
+            font-size: 18px;
         }
         .error {
             background: #f8d7da;
             color: #721c24;
-            padding: 15px;
+            padding: 20px;
             border-radius: 10px;
-            margin: 15px 0;
+            margin: 20px 0;
             text-align: center;
         }
         .no-results {
             text-align: center;
-            padding: 30px;
+            padding: 40px;
             color: #6c757d;
-            font-size: 16px;
+            font-size: 18px;
         }
         .results-count {
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             color: #6c757d;
-            font-size: 13px;
+            font-size: 14px;
         }
         .button-group {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 12px;
+            gap: 10px;
+            margin-top: 15px;
         }
         h1 {
             color: #2c3e50;
-            margin-bottom: 8px;
-            font-size: 24px;
+            margin-bottom: 10px;
         }
-        .subtitle {
+        .info-text {
             text-align: center;
-            margin-top: 5px;
+            margin-top: 10px;
             color: #6c757d;
             font-size: 14px;
         }
@@ -195,72 +184,53 @@
         }
         .popup {
             background: white;
-            padding: 25px;
+            padding: 30px;
             border-radius: 15px;
             text-align: center;
-            max-width: 350px;
+            max-width: 400px;
             width: 90%;
         }
         .warning {
             background: #fff3cd;
             border: 1px solid #ffeaa7;
             border-radius: 10px;
-            padding: 12px;
-            margin: 12px 0;
+            padding: 15px;
+            margin: 15px 0;
             text-align: center;
-            font-size: 13px;
         }
         .stats-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-            gap: 10px;
+            margin-bottom: 20px;
         }
         .total-downloads {
             background: #e74c3c;
             color: white;
-            padding: 6px 12px;
-            border-radius: 15px;
-            font-size: 12px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
             font-weight: 600;
-        }
-        .title-section {
-            text-align: center;
-        }
-        .title-section h1 {
-            color: white;
-            font-size: 28px;
-            margin-bottom: 5px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-        .title-section .subtitle {
-            color: rgba(255,255,255,0.9);
-            font-size: 16px;
         }
     </style>
 </head>
 <body>
-    <div class="title-section">
-        <h1>📁 Файлы для обучения</h1>
-        <div class="subtitle">Учебные материалы и документация</div>
-    </div>
-
     <div class="container">
         <div class="header">
             <div class="stats-header">
-                <div style="flex: 1;">
-                    <div class="warning">
-                        <strong>💡 Как отправить файл в чат:</strong><br>
-                        1. Нажмите "Поделиться файлом"<br>
-                        2. Выберите чат в открывшемся меню<br>
-                        3. Файл будет отправлен как сообщение
-                    </div>
+                <div>
+                    <h1>📁 Файловый каталог</h1>
+                    <p>Все документы в одном месте</p>
                 </div>
                 <div id="total-downloads" class="total-downloads">
                     Всего скачиваний: 0
                 </div>
+            </div>
+            <div class="warning">
+                <strong>💡 Как отправить файл в чат:</strong><br>
+                1. Нажмите "Поделиться файлом"<br>
+                2. Выберите чат в открывшемся меню<br>
+                3. Файл будет отправлен как сообщение
             </div>
         </div>
         
@@ -285,7 +255,7 @@
         <div class="popup">
             <h3 id="popup-title">⏳ Отправка файла</h3>
             <p id="popup-message">Подготовка файла для отправки в чат...</p>
-            <button id="popup-close" class="download-btn" style="margin-top: 15px;">OK</button>
+            <button id="popup-close" class="download-btn" style="margin-top: 20px;">OK</button>
         </div>
     </div>
 
@@ -449,12 +419,12 @@
                 
                 const downloadBtn = document.createElement('button');
                 downloadBtn.className = 'download-btn';
-                downloadBtn.innerHTML = '📥 Скачать';
+                downloadBtn.innerHTML = '📥 Скачать на устройство';
                 downloadBtn.onclick = () => downloadFile(file.url, file.name);
                 
                 const shareBtn = document.createElement('button');
                 shareBtn.className = 'share-btn';
-                shareBtn.innerHTML = '📤 Поделиться';
+                shareBtn.innerHTML = '📤 Поделиться файлом';
                 shareBtn.onclick = () => shareFile(file.url, file.name);
                 
                 buttonGroup.appendChild(downloadBtn);
@@ -467,9 +437,8 @@
                 
                 if (file.description) {
                     const desc = document.createElement('p');
-                    desc.style.marginTop = '8px';
+                    desc.style.marginTop = '10px';
                     desc.style.color = '#495057';
-                    desc.style.fontSize = '13px';
                     desc.textContent = file.description;
                     fileElement.appendChild(desc);
                 }
@@ -556,8 +525,8 @@
         if (window.Telegram && Telegram.WebApp) {
             Telegram.WebApp.expand();
             Telegram.WebApp.ready();
-            Telegram.WebApp.setHeaderColor('#27ae60');
-            Telegram.WebApp.setBackgroundColor('#27ae60');
+            Telegram.WebApp.setHeaderColor('#667eea');
+            Telegram.WebApp.setBackgroundColor('#667eea');
             
             // Кнопка назад
             Telegram.WebApp.BackButton.show();
