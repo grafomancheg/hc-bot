@@ -3,8 +3,8 @@ name: 🚀 Auto Update File List
 on:
   push:
     paths:
-      - 'files/**'    # Запускается при изменении файлов в папке files
-  workflow_dispatch:   # Позволяет запускать вручную
+      - 'files/**'
+  workflow_dispatch:
 
 jobs:
   update-file-list:
@@ -13,41 +13,28 @@ jobs:
     steps:
     - name: 📥 Checkout code
       uses: actions/checkout@v4
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        
-    - name: 🔍 Scan files and generate JSON
+      
+    - name: 🛠️ Setup jq
+      run: sudo apt-get install -y jq bc
+      
+    - name: 🔄 Generate file list
       run: |
-        echo "🔄 Scanning files in /files directory..."
+        # Создаем временный файл с массивом
+        TEMP_FILE=$(mktemp)
+        echo "[" > "$TEMP_FILE"
         
-        # Создаем начальный JSON
-        echo '[' > file-list-new.json
-        
-        # Перебираем все PDF файлы
-        count=0
+        FIRST=true
         for file in files/*.pdf; do
           if [ -f "$file" ]; then
-            if [ $count -gt 0 ]; then
-              echo "," >> file-list-new.json
+            if [ "$FIRST" = false ]; then
+              echo "," >> "$TEMP_FILE"
             fi
             
             filename=$(basename "$file")
             size=$(stat -c%s "$file")
             modified=$(date -r "$file" +"%d.%m.%Y %H:%M")
             
-            # Определяем описание по имени файла
-            description="Документ"
-            if [[ $filename == *"отчет"* ]] || [[ $filename == *"report"* ]]; then
-              description="Финансовый отчет"
-            elif [[ $filename == *"инструкц"* ]] || [[ $filename == *"manual"* ]]; then
-              description="Инструкция пользователя"
-            elif [[ $filename == *"презентац"* ]] || [[ $filename == *"presentation"* ]]; then
-              description="Презентация проекта"
-            elif [[ $filename == *"договор"* ]] || [[ $filename == *"contract"* ]]; then
-              description="Юридический документ"
-            fi
-            
-            # Форматируем размер файла
+            # Форматируем размер
             if [ $size -gt 1048576 ]; then
               size_display=$(echo "scale=1; $size/1048576" | bc)" MB"
             elif [ $size -gt 1024 ]; then
@@ -56,46 +43,41 @@ jobs:
               size_display="$size B"
             fi
             
-            # Создаем запись для файла
-            cat >> file-list-new.json << EOF
-            {
-              "name": "$filename",
-              "url": "files/$filename",
-              "size": "$size_display",
-              "modified": "$modified",
-              "description": "$description"
-            }
-EOF
-            count=$((count+1))
-            echo "✅ Добавлен: $filename"
+            # Описание из имени файла
+            description="Документ"
+            [[ $filename == *"отчет"* ]] && description="Финансовый отчет"
+            [[ $filename == *"инструкц"* ]] && description="Инструкция"
+            [[ $filename == *"презентац"* ]] && description="Презентация"
+            
+            # Добавляем в JSON
+            jq -n \
+              --arg name "$filename" \
+              --arg url "files/$filename" \
+              --arg size "$size_display" \
+              --arg modified "$modified" \
+              --arg desc "$description" \
+              '{
+                name: $name,
+                url: $url,
+                size: $size,
+                modified: $modified,
+                description: $desc
+              }' >> "$TEMP_FILE"
+            
+            FIRST=false
           fi
         done
         
-        echo '' >> file-list-new.json
-        echo ']' >> file-list-new.json
+        echo "]" >> "$TEMP_FILE"
         
-        # Форматируем JSON
-        jq '.' file-list-new.json > file-list.json
+        # Форматируем и сохраняем
+        jq '.' "$TEMP_FILE" > file-list.json
+        rm "$TEMP_FILE"
         
-        echo "🎉 Обработано файлов: $count"
-        
-    - name: 📊 Show changes
+    - name: 💾 Commit and push
       run: |
-        echo "=== Сгенерированный file-list.json ==="
-        cat file-list.json
-        echo "======================================"
-        
-    - name: 💾 Commit changes
-      run: |
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        
-        # Проверяем есть ли изменения
-        if git diff --quiet file-list.json; then
-          echo "✅ Изменений нет"
-        else
-          git add file-list.json
-          git commit -m "🤖 Auto-update: обновлен список файлов"
-          git push
-          echo "🚀 Изменения запушены"
-        fi
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add file-list.json
+        git diff --staged --quiet || git commit -m "🤖 Auto-update file list"
+        git push
