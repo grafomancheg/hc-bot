@@ -47,11 +47,28 @@
             font-size: 16px;
             font-weight: 600;
             margin-top: 15px;
+            margin-right: 10px;
             transition: all 0.3s;
         }
         .download-btn:hover {
             transform: scale(1.05);
             box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+        .download-chat-btn {
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+        .download-chat-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
         }
         .refresh-btn {
             background: linear-gradient(45deg, #007bff, #0056b3);
@@ -131,9 +148,20 @@
             color: #6c757d;
             font-size: 14px;
         }
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
         h1 {
             color: #2c3e50;
             margin-bottom: 10px;
+        }
+        .info-text {
+            text-align: center;
+            margin-top: 10px;
+            color: #6c757d;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -142,6 +170,7 @@
         <div class="header">
             <h1>📁 Файловый каталог</h1>
             <p>Все документы в одном месте</p>
+            <p class="info-text">Файлы можно скачать на устройство или отправить в чат</p>
         </div>
         
         <div class="search-container">
@@ -265,10 +294,21 @@
                 modified.className = 'file-info';
                 modified.textContent = `📅 Изменен: ${file.modified}`;
                 
+                const buttonGroup = document.createElement('div');
+                buttonGroup.className = 'button-group';
+                
                 const downloadBtn = document.createElement('button');
                 downloadBtn.className = 'download-btn';
-                downloadBtn.innerHTML = '📥 Скачать PDF';
-                downloadBtn.onclick = () => downloadFile(file.url);
+                downloadBtn.innerHTML = '📥 Скачать на устройство';
+                downloadBtn.onclick = () => downloadFile(file.url, file.name);
+                
+                const downloadChatBtn = document.createElement('button');
+                downloadChatBtn.className = 'download-chat-btn';
+                downloadChatBtn.innerHTML = '💬 Отправить в чат';
+                downloadChatBtn.onclick = () => sendToChat(file.url, file.name);
+                
+                buttonGroup.appendChild(downloadBtn);
+                buttonGroup.appendChild(downloadChatBtn);
                 
                 fileElement.appendChild(name);
                 fileElement.appendChild(size);
@@ -282,27 +322,89 @@
                     fileElement.appendChild(desc);
                 }
                 
-                fileElement.appendChild(downloadBtn);
+                fileElement.appendChild(buttonGroup);
                 container.appendChild(fileElement);
             });
         }
         
-        // Функция скачивания
-        function downloadFile(url) {
+        // Функция скачивания на устройство
+        function downloadFile(url, fileName) {
             // Для GitHub Pages используем относительные пути
             const fullUrl = url.startsWith('http') ? url : window.location.origin + '/' + url;
-            window.open(fullUrl, '_blank');
+            
+            // Создаем временную ссылку для скачивания
+            const a = document.createElement('a');
+            a.href = fullUrl;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
             
             // Уведомление в Telegram
             if (window.Telegram && Telegram.WebApp) {
                 Telegram.WebApp.showPopup({
                     title: '📥 Скачивание началось',
-                    message: 'Файл будет загружен в ваше устройство',
+                    message: 'Файл будет загружен на ваше устройство',
                     buttons: [{ type: 'ok' }]
                 });
             } else {
                 // Уведомление для браузера
                 alert('Скачивание началось!');
+            }
+        }
+        
+        // Функция отправки файла в чат
+        function sendToChat(url, fileName) {
+            // Для GitHub Pages используем относительные пути
+            const fullUrl = url.startsWith('http') ? url : window.location.origin + '/' + url;
+            
+            // Проверяем, что мы в Telegram Web App
+            if (window.Telegram && Telegram.WebApp) {
+                // Показываем индикатор загрузки
+                Telegram.WebApp.showPopup({
+                    title: '⏳ Отправка файла',
+                    message: 'Подготовка файла для отправки в чат...',
+                    buttons: []
+                });
+                
+                // Получаем файл как Blob
+                fetch(fullUrl)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.blob();
+                    })
+                    .then(blob => {
+                        // Создаем File объект из Blob
+                        const file = new File([blob], fileName, { type: blob.type });
+                        
+                        // Отправляем файл в чат через Telegram Web App
+                        Telegram.WebApp.sendData(JSON.stringify({
+                            action: 'send_file',
+                            file_name: fileName,
+                            file_url: fullUrl
+                        }));
+                        
+                        // Показываем уведомление об успешной отправке
+                        Telegram.WebApp.showPopup({
+                            title: '✅ Файл отправлен',
+                            message: 'Файл успешно отправлен в чат',
+                            buttons: [{ type: 'ok' }]
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Ошибка отправки файла:', error);
+                        Telegram.WebApp.showPopup({
+                            title: '❌ Ошибка отправки',
+                            message: 'Не удалось отправить файл в чат',
+                            buttons: [{ type: 'ok' }]
+                        });
+                    });
+            } else {
+                // Если не в Telegram, просто открываем файл
+                window.open(fullUrl, '_blank');
+                alert('Открытие файла в новой вкладке. В Telegram Web App файл будет отправлен в чат.');
             }
         }
         
@@ -312,6 +414,11 @@
             Telegram.WebApp.ready();
             Telegram.WebApp.setHeaderColor('#667eea');
             Telegram.WebApp.setBackgroundColor('#667eea');
+            
+            // Обработка данных, отправленных из чата
+            Telegram.WebApp.onEvent('messageSent', function(message) {
+                console.log('Сообщение отправлено:', message);
+            });
             
             // Кнопка назад
             Telegram.WebApp.BackButton.show();
