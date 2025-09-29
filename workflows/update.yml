@@ -1,0 +1,83 @@
+name: 🚀 Auto Update File List
+
+on:
+  push:
+    paths:
+      - 'files/**'
+  workflow_dispatch:
+
+jobs:
+  update-file-list:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🛠️ Setup jq
+      run: sudo apt-get install -y jq bc
+      
+    - name: 🔄 Generate file list
+      run: |
+        # Создаем временный файл с массивом
+        TEMP_FILE=$(mktemp)
+        echo "[" > "$TEMP_FILE"
+        
+        FIRST=true
+        for file in files/*.pdf; do
+          if [ -f "$file" ]; then
+            if [ "$FIRST" = false ]; then
+              echo "," >> "$TEMP_FILE"
+            fi
+            
+            filename=$(basename "$file")
+            size=$(stat -c%s "$file")
+            modified=$(date -r "$file" +"%d.%m.%Y %H:%M")
+            
+            # Форматируем размер
+            if [ $size -gt 1048576 ]; then
+              size_display=$(echo "scale=1; $size/1048576" | bc)" MB"
+            elif [ $size -gt 1024 ]; then
+              size_display=$(echo "scale=1; $size/1024" | bc)" KB"
+            else
+              size_display="$size B"
+            fi
+            
+            # Описание из имени файла
+            description="Документ"
+            [[ $filename == *"отчет"* ]] && description="Финансовый отчет"
+            [[ $filename == *"инструкц"* ]] && description="Инструкция"
+            [[ $filename == *"презентац"* ]] && description="Презентация"
+            
+            # Добавляем в JSON
+            jq -n \
+              --arg name "$filename" \
+              --arg url "files/$filename" \
+              --arg size "$size_display" \
+              --arg modified "$modified" \
+              --arg desc "$description" \
+              '{
+                name: $name,
+                url: $url,
+                size: $size,
+                modified: $modified,
+                description: $desc
+              }' >> "$TEMP_FILE"
+            
+            FIRST=false
+          fi
+        done
+        
+        echo "]" >> "$TEMP_FILE"
+        
+        # Форматируем и сохраняем
+        jq '.' "$TEMP_FILE" > file-list.json
+        rm "$TEMP_FILE"
+        
+    - name: 💾 Commit and push
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add file-list.json
+        git diff --staged --quiet || git commit -m "🤖 Auto-update file list"
+        git push
