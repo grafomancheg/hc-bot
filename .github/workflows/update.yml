@@ -13,71 +13,60 @@ jobs:
     steps:
     - name: 📥 Checkout code
       uses: actions/checkout@v4
-      
-    - name: 🛠️ Setup jq
-      run: sudo apt-get install -y jq bc
-      
-    - name: 🔄 Generate file list
+    
+    - name: 🔄 Generate file list with direct links
       run: |
-        # Создаем временный файл с массивом
-        TEMP_FILE=$(mktemp)
-        echo "[" > "$TEMP_FILE"
+        echo "[" > file-list.json
         
-        FIRST=true
+        count=0
         for file in files/*.pdf; do
           if [ -f "$file" ]; then
-            if [ "$FIRST" = false ]; then
-              echo "," >> "$TEMP_FILE"
+            if [ $count -gt 0 ]; then
+              echo "," >> file-list.json
             fi
             
             filename=$(basename "$file")
             size=$(stat -c%s "$file")
-            modified=$(date -r "$file" +"%d.%m.%Y %H:%M")
+            modified=$(date -r "$file" +"%d.%m.%Y")
             
             # Форматируем размер
             if [ $size -gt 1048576 ]; then
               size_display=$(echo "scale=1; $size/1048576" | bc)" MB"
-            elif [ $size -gt 1024 ]; then
-              size_display=$(echo "scale=1; $size/1024" | bc)" KB"
             else
-              size_display="$size B"
+              size_display=$(echo "scale=1; $size/1024" | bc)" KB"
             fi
             
-            # Описание из имени файла
+            # Прямая ссылка на raw файл
+            raw_url="https://raw.githubusercontent.com/${{ github.repository }}/main/files/$filename"
+            
+            # Описание
             description="Документ"
             [[ $filename == *"отчет"* ]] && description="Финансовый отчет"
             [[ $filename == *"инструкц"* ]] && description="Инструкция"
             [[ $filename == *"презентац"* ]] && description="Презентация"
             
-            # Добавляем в JSON
-            jq -n \
-              --arg name "$filename" \
-              --arg url "files/$filename" \
-              --arg size "$size_display" \
-              --arg modified "$modified" \
-              --arg desc "$description" \
-              '{
-                name: $name,
-                url: $url,
-                size: $size,
-                modified: $modified,
-                description: $desc
-              }' >> "$TEMP_FILE"
-            
-            FIRST=false
+            cat >> file-list.json << EOF
+            {
+              "name": "$filename",
+              "url": "$raw_url",
+              "size": "$size_display",
+              "modified": "$modified", 
+              "description": "$description"
+            }
+EOF
+            count=$((count+1))
           fi
         done
         
-        echo "]" >> "$TEMP_FILE"
+        echo "" >> file-list.json
+        echo "]" >> file-list.json
         
-        # Форматируем и сохраняем
-        jq '.' "$TEMP_FILE" > file-list.json
-        rm "$TEMP_FILE"
+        echo "✅ Создано записей: $count"
         
-    - name: 💾 Commit and push
+    - name: 💾 Commit changes
       run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
+        git config --local user.name "github-actions[bot]"
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git add file-list.json
         git diff --staged --quiet || git commit -m "🤖 Auto-update file list"
         git push
