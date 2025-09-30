@@ -11,23 +11,13 @@
             --primary-dark: #1e3d72;
             --secondary-color: #00a8e8;
             --accent-color: #ff6b35;
-            --success-color: #28a745;
             --text-dark: #2c3e50;
             --text-light: #6c757d;
             --bg-white: #ffffff;
             --bg-light: #f8f9fa;
-            --bg-lighter: #fdfdfe;
-            --border-color: #e9ecef;
             --border-radius: 12px;
             --shadow: 0 4px 20px rgba(0,0,0,0.08);
-            --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
             --transition: all 0.3s ease;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
         }
 
         body {
@@ -40,7 +30,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 900px;
             margin: 0 auto;
             background: var(--bg-white);
             border-radius: var(--border-radius);
@@ -70,61 +60,159 @@
             font-weight: 400;
         }
 
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            color: white;
-            padding: 20px;
+        .file-item {
+            background: var(--bg-white);
+            margin: 16px 0;
+            padding: 24px;
             border-radius: var(--border-radius);
-            text-align: center;
+            border-left: 4px solid var(--primary-color);
+            transition: var(--transition);
+            border: 1px solid #e9ecef;
+        }
+
+        .file-item:hover {
+            transform: translateY(-2px);
             box-shadow: var(--shadow);
+            border-left-color: var(--accent-color);
         }
 
-        .stat-card.secondary {
-            background: linear-gradient(135deg, var(--secondary-color), #0099cc);
-        }
-
-        .stat-card.accent {
-            background: linear-gradient(135deg, var(--accent-color), #e55a2b);
-        }
-
-        .stat-number {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-
-        .controls {
+        .file-name {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 12px;
             display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-info {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin: 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .stats-container {
+            display: flex;
+            gap: 20px;
+            margin: 15px 0;
             flex-wrap: wrap;
         }
 
+        .download-count {
+            color: var(--accent-color);
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #fff5f5;
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+
+        .share-count {
+            color: var(--secondary-color);
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #f0f8ff;
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 160px;
+            justify-content: center;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(44, 90, 160, 0.3);
+        }
+
+        .share-btn {
+            background: linear-gradient(135deg, var(--secondary-color), #0099cc);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 160px;
+            justify-content: center;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 168, 232, 0.3);
+        }
+
+        .refresh-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            width: 100%;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(44, 90, 160, 0.3);
+        }
+
         .search-container {
-            flex: 1;
-            min-width: 300px;
+            margin-bottom: 24px;
             position: relative;
         }
 
         .search-input {
             width: 100%;
-            padding: 14px 50px 14px 20px;
-            border: 2px solid var(--border-color);
-            border-radius: var(--border-radius);
+            padding: 14px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
             font-size: 0.95rem;
             transition: var(--transition);
+            box-sizing: border-box;
             background: var(--bg-white);
         }
 
@@ -142,177 +230,51 @@
             color: var(--text-light);
         }
 
-        .refresh-btn {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            color: white;
+        .clear-search {
+            position: absolute;
+            right: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
             border: none;
-            padding: 14px 24px;
-            border-radius: var(--border-radius);
+            color: var(--text-light);
             cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 600;
-            transition: var(--transition);
+            font-size: 16px;
+            display: none;
+        }
+
+        .total-stats {
             display: flex;
-            align-items: center;
-            gap: 8px;
-            white-space: nowrap;
-        }
-
-        .refresh-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .files-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: var(--bg-white);
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            box-shadow: var(--shadow);
-        }
-
-        .files-table th {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            color: white;
-            padding: 16px 12px;
-            text-align: left;
-            font-weight: 600;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .files-table th:first-child {
-            border-top-left-radius: var(--border-radius);
-        }
-
-        .files-table th:last-child {
-            border-top-right-radius: var(--border-radius);
-        }
-
-        .files-table td {
-            padding: 16px 12px;
-            border-bottom: 1px solid var(--border-color);
-            vertical-align: middle;
-        }
-
-        .files-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .files-table tr {
-            transition: var(--transition);
-            background: var(--bg-white);
-        }
-
-        .files-table tr:hover {
-            background: var(--bg-lighter);
-            transform: translateY(-1px);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .file-name-cell {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .file-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            font-size: 1.1rem;
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .total-downloads {
+            background: var(--accent-color);
             color: white;
-        }
-
-        .file-name-content {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .file-main-name {
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 2px;
-        }
-
-        .file-description {
-            font-size: 0.8rem;
-            color: var(--text-light);
-        }
-
-        .file-size {
-            font-weight: 600;
-            color: var(--text-dark);
-        }
-
-        .file-date {
-            color: var(--text-light);
+            padding: 10px 20px;
+            border-radius: 25px;
             font-size: 0.9rem;
-        }
-
-        .file-stats {
-            display: flex;
-            gap: 15px;
-        }
-
-        .stat-badge {
+            font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 5px;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .download-stat {
-            background: rgba(255, 107, 53, 0.1);
-            color: var(--accent-color);
-        }
-
-        .share-stat {
-            background: rgba(0, 168, 232, 0.1);
-            color: var(--secondary-color);
-        }
-
-        .action-buttons {
-            display: flex;
             gap: 8px;
+            box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
         }
 
-        .btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.8rem;
+        .total-shares {
+            background: var(--secondary-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
             font-weight: 600;
-            transition: var(--transition);
             display: flex;
             align-items: center;
-            gap: 6px;
-            white-space: nowrap;
-        }
-
-        .btn-download {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            color: white;
-        }
-
-        .btn-share {
-            background: linear-gradient(135deg, var(--secondary-color), #0099cc);
-            color: white;
-        }
-
-        .btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            gap: 8px;
+            box-shadow: 0 2px 8px rgba(0, 168, 232, 0.3);
         }
 
         .loading {
@@ -346,6 +308,28 @@
             text-align: center;
         }
 
+        .info-box {
+            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+            border: 1px solid #e1f5fe;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .info-title {
+            color: var(--primary-color);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .info-text {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
         .popup-overlay {
             position: fixed;
             top: 0;
@@ -369,55 +353,37 @@
             box-shadow: var(--shadow);
         }
 
+        .file-description {
+            color: var(--text-dark);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 12px 0;
+            padding: 12px;
+            background: var(--bg-light);
+            border-radius: 8px;
+            border-left: 3px solid var(--secondary-color);
+        }
+
         @media (max-width: 768px) {
             .container {
-                padding: 15px;
+                padding: 20px;
             }
             
             .main-title {
                 font-size: 1.8rem;
             }
             
-            .dashboard {
-                grid-template-columns: 1fr;
+            .file-item {
+                padding: 20px;
             }
             
-            .controls {
+            .button-group {
                 flex-direction: column;
             }
             
-            .search-container {
-                min-width: auto;
+            .download-btn, .share-btn {
+                min-width: 100%;
             }
-            
-            .files-table {
-                display: block;
-                overflow-x: auto;
-            }
-            
-            .action-buttons {
-                flex-direction: column;
-            }
-            
-            .btn {
-                min-width: 120px;
-                justify-content: center;
-            }
-        }
-
-        .sort-header {
-            cursor: pointer;
-            user-select: none;
-            transition: var(--transition);
-        }
-
-        .sort-header:hover {
-            background: rgba(255,255,255,0.1) !important;
-        }
-
-        .sort-icon {
-            margin-left: 5px;
-            opacity: 0.6;
         }
     </style>
 </head>
@@ -426,34 +392,37 @@
         <div class="header">
             <h1 class="main-title">📚 Файлы для обучения</h1>
             <div class="subtitle">Учебные материалы и профессиональная документация</div>
+            
+            <div class="total-stats">
+                <div id="total-downloads" class="total-downloads">
+                    📥 Скачиваний: 0
+                </div>
+                <div id="total-shares" class="total-shares">
+                    📤 Отправок: 0
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-title">💡 Как отправить файл в чат</div>
+                <div class="info-text">
+                    1. Нажмите "Поделиться файлом"<br>
+                    2. Выберите чат в открывшемся меню<br>
+                    3. Файл будет отправлен как сообщение
+                </div>
+            </div>
         </div>
         
-        <div class="dashboard">
-            <div class="stat-card">
-                <div class="stat-number" id="total-files">0</div>
-                <div class="stat-label">Всего файлов</div>
-            </div>
-            <div class="stat-card secondary">
-                <div class="stat-number" id="total-downloads">0</div>
-                <div class="stat-label">Скачиваний</div>
-            </div>
-            <div class="stat-card accent">
-                <div class="stat-number" id="total-shares">0</div>
-                <div class="stat-label">Отправок</div>
-            </div>
-        </div>
-
-        <div class="controls">
-            <div class="search-container">
-                <input type="text" id="search-input" class="search-input" placeholder="🔍 Поиск файлов по названию или описанию...">
-                <span class="search-icon">🔍</span>
-            </div>
-            <button class="refresh-btn" onclick="loadFiles()">
-                🔄 Обновить список
-            </button>
+        <div class="search-container">
+            <input type="text" id="search-input" class="search-input" placeholder="🔍 Поиск файлов по названию или описанию...">
+            <button id="clear-search" class="clear-search">✕</button>
+            <span class="search-icon">🔍</span>
         </div>
         
         <div id="results-count" class="results-count"></div>
+        
+        <button class="refresh-btn" onclick="loadFiles()">
+            🔄 Обновить список файлов
+        </button>
         
         <div id="files-container">
             <div class="loading">Загрузка файлов...</div>
@@ -464,16 +433,15 @@
         <div class="popup">
             <h3 id="popup-title">⏳ Отправка файла</h3>
             <p id="popup-message">Подготовка файла для отправки в чат...</p>
-            <button id="popup-close" class="btn btn-download" style="margin-top: 20px;">OK</button>
+            <button id="popup-close" class="download-btn" style="margin-top: 20px;">OK</button>
         </div>
     </div>
 
     <script>
+        // Весь JavaScript код остается без изменений
         let allFiles = [];
         let downloadStats = {};
         let shareStats = {};
-        let sortField = 'name';
-        let sortDirection = 'asc';
         
         function loadStats() {
             const savedDownloadStats = localStorage.getItem('fileDownloadStats');
@@ -498,9 +466,8 @@
             const totalDownloads = Object.values(downloadStats).reduce((sum, count) => sum + count, 0);
             const totalShares = Object.values(shareStats).reduce((sum, count) => sum + count, 0);
             
-            document.getElementById('total-downloads').textContent = totalDownloads;
-            document.getElementById('total-shares').textContent = totalShares;
-            document.getElementById('total-files').textContent = allFiles.length;
+            document.getElementById('total-downloads').textContent = `📥 Скачиваний: ${totalDownloads}`;
+            document.getElementById('total-shares').textContent = `📤 Отправок: ${totalShares}`;
         }
         
         function getDownloadCount(fileUrl) { return downloadStats[fileUrl] || 0; }
@@ -524,48 +491,6 @@
         
         function hidePopup() {
             document.getElementById('popup-overlay').style.display = 'none';
-        }
-        
-        function getFileIcon(filename) {
-            const ext = filename.split('.').pop().toLowerCase();
-            const icons = {
-                pdf: '📕',
-                doc: '📄', docx: '📄',
-                xls: '📊', xlsx: '📊',
-                ppt: '📽️', pptx: '📽️',
-                zip: '📦', rar: '📦', '7z': '📦',
-                jpg: '🖼️', jpeg: '🖼️', png: '🖼️', gif: '🖼️',
-                txt: '📝',
-                mp3: '🎵', mp4: '🎬',
-                default: '📄'
-            };
-            return icons[ext] || icons.default;
-        }
-        
-        function sortFiles(files) {
-            return files.sort((a, b) => {
-                let aVal = a[sortField];
-                let bVal = b[sortField];
-                
-                if (sortField === 'size') {
-                    aVal = parseFloat(aVal);
-                    bVal = parseFloat(bVal);
-                }
-                
-                if (aVal < bVal) return sortDirection === 'asc' ? -1 : 1;
-                if (aVal > bVal) return sortDirection === 'asc' ? 1 : -1;
-                return 0;
-            });
-        }
-        
-        function setSort(field) {
-            if (sortField === field) {
-                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
-            } else {
-                sortField = field;
-                sortDirection = 'asc';
-            }
-            filterFiles();
         }
         
         async function loadFiles() {
@@ -598,6 +523,15 @@
             const container = document.getElementById('files-container');
             const resultsCount = document.getElementById('results-count');
             
+            const clearButton = document.getElementById('clear-search');
+            clearButton.style.display = searchQuery ? 'block' : 'none';
+            
+            if (allFiles.length === 0) {
+                container.innerHTML = '<div class="file-item">📭 Файлы не найдены</div>';
+                resultsCount.textContent = '';
+                return;
+            }
+            
             let filteredFiles = searchQuery ? 
                 allFiles.filter(file => {
                     const nameMatch = file.name.toLowerCase().includes(searchQuery);
@@ -605,8 +539,6 @@
                     return nameMatch || descMatch;
                 }) : 
                 allFiles;
-            
-            filteredFiles = sortFiles(filteredFiles);
             
             resultsCount.textContent = searchQuery ? 
                 `Найдено файлов: ${filteredFiles.length} из ${allFiles.length}` : 
@@ -624,73 +556,67 @@
                 return;
             }
             
-            const table = document.createElement('table');
-            table.className = 'files-table';
-            
-            // Header
-            const header = document.createElement('thead');
-            header.innerHTML = `
-                <tr>
-                    <th class="sort-header" onclick="setSort('name')">
-                        Файл ${sortField === 'name' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
-                    </th>
-                    <th class="sort-header" onclick="setSort('size')">
-                        Размер ${sortField === 'size' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
-                    </th>
-                    <th class="sort-header" onclick="setSort('modified')">
-                        Дата ${sortField === 'modified' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
-                    </th>
-                    <th>Статистика</th>
-                    <th>Действия</th>
-                </tr>
-            `;
-            table.appendChild(header);
-            
-            // Body
-            const body = document.createElement('tbody');
-            
             filteredFiles.forEach(file => {
-                const row = document.createElement('tr');
+                const fileElement = document.createElement('div');
+                fileElement.className = 'file-item';
                 
-                row.innerHTML = `
-                    <td>
-                        <div class="file-name-cell">
-                            <div class="file-icon">${getFileIcon(file.name)}</div>
-                            <div class="file-name-content">
-                                <div class="file-main-name">${file.name}</div>
-                                ${file.description ? `<div class="file-description">${file.description}</div>` : ''}
-                            </div>
-                        </div>
-                    </td>
-                    <td class="file-size">${file.size}</td>
-                    <td class="file-date">${file.modified}</td>
-                    <td>
-                        <div class="file-stats">
-                            <div class="stat-badge download-stat">
-                                📥 ${getDownloadCount(file.url)}
-                            </div>
-                            <div class="stat-badge share-stat">
-                                📤 ${getShareCount(file.url)}
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="btn btn-download" onclick="downloadFile('${file.url}', '${file.name.replace(/'/g, "\\'")}')">
-                                📥 Скачать
-                            </button>
-                            <button class="btn btn-share" onclick="shareFile('${file.url}', '${file.name.replace(/'/g, "\\'")}')">
-                                📤 Поделиться
-                            </button>
-                        </div>
-                    </td>
-                `;
+                const name = document.createElement('h3');
+                name.className = 'file-name';
+                name.innerHTML = `📄 ${file.name}`;
                 
-                body.appendChild(row);
+                const size = document.createElement('div');
+                size.className = 'file-info';
+                size.innerHTML = `📏 <strong>Размер:</strong> ${file.size}`;
+                
+                const modified = document.createElement('div');
+                modified.className = 'file-info';
+                modified.innerHTML = `📅 <strong>Изменен:</strong> ${file.modified}`;
+                
+                const statsContainer = document.createElement('div');
+                statsContainer.className = 'stats-container';
+                
+                const downloadCount = document.createElement('div');
+                downloadCount.className = 'download-count';
+                downloadCount.innerHTML = `📥 Скачан: ${getDownloadCount(file.url)} раз`;
+                
+                const shareCount = document.createElement('div');
+                shareCount.className = 'share-count';
+                shareCount.innerHTML = `📤 Отправлен: ${getShareCount(file.url)} раз`;
+                
+                statsContainer.appendChild(downloadCount);
+                statsContainer.appendChild(shareCount);
+                
+                const buttonGroup = document.createElement('div');
+                buttonGroup.className = 'button-group';
+                
+                const downloadBtn = document.createElement('button');
+                downloadBtn.className = 'download-btn';
+                downloadBtn.innerHTML = '📥 Скачать на устройство';
+                downloadBtn.onclick = () => downloadFile(file.url, file.name);
+                
+                const shareBtn = document.createElement('button');
+                shareBtn.className = 'share-btn';
+                shareBtn.innerHTML = '📤 Поделиться файлом';
+                shareBtn.onclick = () => shareFile(file.url, file.name);
+                
+                buttonGroup.appendChild(downloadBtn);
+                buttonGroup.appendChild(shareBtn);
+                
+                fileElement.appendChild(name);
+                fileElement.appendChild(size);
+                fileElement.appendChild(modified);
+                fileElement.appendChild(statsContainer);
+                
+                if (file.description) {
+                    const desc = document.createElement('div');
+                    desc.className = 'file-description';
+                    desc.textContent = file.description;
+                    fileElement.appendChild(desc);
+                }
+                
+                fileElement.appendChild(buttonGroup);
+                container.appendChild(fileElement);
             });
-            
-            table.appendChild(body);
-            container.appendChild(table);
         }
         
         function downloadFile(url, fileName) {
@@ -759,10 +685,17 @@
             loadFiles();
             
             const searchInput = document.getElementById('search-input');
+            const clearButton = document.getElementById('clear-search');
             
             searchInput.addEventListener('input', function() {
                 clearTimeout(this.searchTimeout);
                 this.searchTimeout = setTimeout(filterFiles, 300);
+            });
+            
+            clearButton.addEventListener('click', function() {
+                searchInput.value = '';
+                filterFiles();
+                searchInput.focus();
             });
             
             searchInput.addEventListener('keypress', function(e) {
