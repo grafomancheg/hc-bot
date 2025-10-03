@@ -7,25 +7,24 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --primary-color: #27AE60;
-            --primary-light: #58D68D;
-            --primary-dark: #219653;
-            --secondary-color: #2ECC71;
-            --accent-color: #E74C3C;
-            --text-dark: #2C3E50;
-            --text-light: #7F8C8D;
+            --primary-color: #2F5496;
+            --primary-dark: #1E3A5F;
+            --secondary-color: #217346;
+            --accent-color: #D83B01;
+            --text-dark: #323130;
+            --text-light: #605E5C;
             --bg-white: #FFFFFF;
-            --bg-light: #F8F9FA;
-            --border-color: #E8F5E9;
-            --border-radius: 4px;
-            --shadow: 0 1px 3px rgba(0,0,0,0.05);
+            --bg-light: #F3F2F1;
+            --border-color: #D2D0CE;
+            --border-radius: 6px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.12);
             --transition: all 0.2s ease;
         }
 
         body {
             font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             padding: 16px;
-            background: linear-gradient(135deg, #FFFFFF 0%, #F1F8E9 100%);
+            background: linear-gradient(135deg, #F3F2F1 0%, #E1DFDD 100%);
             min-height: 100vh;
             margin: 0;
             line-height: 1.5;
@@ -36,9 +35,9 @@
             max-width: 900px;
             margin: 0 auto;
             background: var(--bg-white);
-            border-radius: 8px;
+            border-radius: var(--border-radius);
             padding: 20px;
-            box-shadow: 0 2px 10px rgba(39, 174, 96, 0.1);
+            box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
         }
 
@@ -67,15 +66,15 @@
             background: var(--bg-white);
             margin: 12px 0;
             padding: 16px;
-            border-radius: 6px;
-            border-left: 4px solid var(--primary-color);
+            border-radius: var(--border-radius);
+            border-left: 3px solid var(--primary-color);
             transition: var(--transition);
             border: 1px solid var(--border-color);
         }
 
         .file-item:hover {
             box-shadow: var(--shadow);
-            border-left-color: var(--primary-light);
+            border-left-color: var(--accent-color);
         }
 
         .file-name {
@@ -111,23 +110,23 @@
             display: flex;
             align-items: center;
             gap: 4px;
-            background: #FDEDEC;
-            padding: 4px 10px;
-            border-radius: var(--border-radius);
-            border: 1px solid #FADBD8;
+            background: #FFF5F5;
+            padding: 4px 8px;
+            border-radius: 12px;
+            border: 1px solid #FFE2E2;
         }
 
         .share-count {
-            color: var(--primary-dark);
+            color: var(--secondary-color);
             font-weight: 500;
             font-size: 0.75rem;
             display: flex;
             align-items: center;
             gap: 4px;
-            background: #E8F6F3;
-            padding: 4px 10px;
-            border-radius: var(--border-radius);
-            border: 1px solid #D0ECE7;
+            background: #F0FFF4;
+            padding: 4px 8px;
+            border-radius: 12px;
+            border: 1px solid #C6F6D5;
         }
 
         .button-group {
@@ -141,52 +140,50 @@
             background: var(--primary-color);
             color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: var(--border-radius);
+            padding: 6px 12px;
+            border-radius: 4px;
             cursor: pointer;
             font-size: 0.8rem;
             font-weight: 500;
             transition: var(--transition);
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
             min-width: 140px;
             justify-content: center;
         }
 
         .download-btn:hover {
             background: var(--primary-dark);
-            transform: translateY(-1px);
         }
 
         .share-btn {
             background: var(--secondary-color);
             color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: var(--border-radius);
+            padding: 6px 12px;
+            border-radius: 4px;
             cursor: pointer;
             font-size: 0.8rem;
             font-weight: 500;
             transition: var(--transition);
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
             min-width: 140px;
             justify-content: center;
         }
 
         .share-btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-1px);
+            background: #1A5C38;
         }
 
         .refresh-btn {
             background: var(--primary-color);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: var(--border-radius);
+            padding: 8px 16px;
+            border-radius: 4px;
             cursor: pointer;
             font-size: 0.85rem;
             font-weight: 500;
@@ -196,7 +193,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
+        }
+
+        .refresh-btn:hover {
+            background: var(--primary-dark);
         }
 
         .search-container {
@@ -206,9 +207,9 @@
 
         .search-input {
             width: 100%;
-            padding: 12px 16px;
+            padding: 10px 16px;
             border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
+            border-radius: 4px;
             font-size: 0.85rem;
             transition: var(--transition);
             box-sizing: border-box;
@@ -218,7 +219,7 @@
         .search-input:focus {
             outline: none;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(39, 174, 96, 0.1);
+            box-shadow: 0 0 0 2px rgba(47, 84, 150, 0.1);
         }
 
         .search-icon {
@@ -254,8 +255,8 @@
         .total-downloads {
             background: var(--accent-color);
             color: white;
-            padding: 8px 16px;
-            border-radius: var(--border-radius);
+            padding: 6px 12px;
+            border-radius: 16px;
             font-size: 0.8rem;
             font-weight: 500;
             display: flex;
@@ -264,10 +265,10 @@
         }
 
         .total-shares {
-            background: var(--primary-dark);
+            background: var(--secondary-color);
             color: white;
-            padding: 8px 16px;
-            border-radius: var(--border-radius);
+            padding: 6px 12px;
+            border-radius: 16px;
             font-size: 0.8rem;
             font-weight: 500;
             display: flex;
@@ -283,13 +284,14 @@
         }
 
         .error {
-            background: #FDEDEC;
-            color: #C0392B;
+            background: #FEF2F2;
+            color: #991B1B;
             padding: 16px;
-            border-radius: var(--border-radius);
+            border-radius: 6px;
             margin: 16px 0;
             text-align: center;
-            border: 1px solid #FADBD8;
+            border-left: 3px solid #DC2626;
+            border: 1px solid #FECACA;
         }
 
         .no-results {
@@ -307,16 +309,16 @@
         }
 
         .info-box {
-            background: #E8F6F3;
-            border: 1px solid #D0ECE7;
-            border-radius: var(--border-radius);
+            background: #F0F7FF;
+            border: 1px solid #DBEAFE;
+            border-radius: 6px;
             padding: 16px;
-            margin: 20px 0;
+            margin: 16px 0;
             text-align: center;
         }
 
         .info-title {
-            color: var(--primary-dark);
+            color: var(--primary-color);
             font-size: 0.85rem;
             font-weight: 600;
             margin-bottom: 8px;
@@ -344,7 +346,7 @@
         .popup {
             background: white;
             padding: 24px;
-            border-radius: var(--border-radius);
+            border-radius: 8px;
             text-align: center;
             max-width: 320px;
             width: 90%;
@@ -359,12 +361,8 @@
             margin: 10px 0;
             padding: 10px;
             background: var(--bg-light);
-            border-radius: var(--border-radius);
+            border-radius: 4px;
             border-left: 2px solid var(--secondary-color);
-        }
-
-        .controls-section {
-            margin-bottom: 20px;
         }
 
         @media (max-width: 768px) {
@@ -398,27 +396,10 @@
                 <div id="total-downloads" class="total-downloads">
                     📥 Загрузок: 0
                 </div>
+                <div id="total-shares" class="total-shares">
+                    📤 Отправок: 0
+                </div>
             </div>
-
-            <!-- Строка поиска теперь выше -->
-            <div class="search-container">
-                <input type="text" id="search-input" class="search-input" placeholder="🔍 Поиск документов по названию или описанию...">
-                <button id="clear-search" class="clear-search">✕</button>
-                <span class="search-icon">🔍</span>
-            </div>
-
-            <div class="controls-section">
-                <button class="refresh-btn" onclick="loadFiles()">
-                    🔄 Обновить список
-                </button>
-            </div>
-
-            <div id="results-count" class="results-count"></div>
-
-            <div id="files-container">
-                <div class="loading">Загрузка документов...</div>
-            </div>
-
             <div class="info-box">
                 <div class="info-title">💡 Отправка документа</div>
                 <div class="info-text">
@@ -428,8 +409,19 @@
                 </div>
             </div>
         </div>
+        <div class="search-container">
+            <input type="text" id="search-input" class="search-input" placeholder="🔍 Поиск документов по названию или описанию...">
+            <button id="clear-search" class="clear-search">✕</button>
+            <span class="search-icon">🔍</span>
+        </div>
+        <div id="results-count" class="results-count"></div>
+        <button class="refresh-btn" onclick="loadFiles()">
+            🔄 Обновить список
+        </button>
+        <div id="files-container">
+            <div class="loading">Загрузка документов...</div>
+        </div>
     </div>
-
     <div id="popup-overlay" class="popup-overlay" style="display: none;">
         <div class="popup">
             <h3 id="popup-title" style="font-size: 1rem; margin-bottom: 12px;">⏳ Отправка документа</h3>
@@ -437,7 +429,6 @@
             <button id="popup-close" class="download-btn" style="margin-top: 16px; min-width: 80px;">OK</button>
         </div>
     </div>
-
     <script>
         let allFiles = [];
         let downloadStats = {};
@@ -668,8 +659,8 @@
         if (window.Telegram && Telegram.WebApp) {
             Telegram.WebApp.expand();
             Telegram.WebApp.ready();
-            Telegram.WebApp.setHeaderColor('#27AE60');
-            Telegram.WebApp.setBackgroundColor('#FFFFFF');
+            Telegram.WebApp.setHeaderColor('#2F5496');
+            Telegram.WebApp.setBackgroundColor('#F3F2F1');
             Telegram.WebApp.BackButton.show();
             Telegram.WebApp.BackButton.onClick(() => Telegram.WebApp.close());
         }
